@@ -1,8 +1,18 @@
 const http = require('http');
 
 function handleRequest(request, response) {
-    response.statusCode = 200;
-    response.end('<h1>Hello World!</h1>');
+
+    if (request.url === '/currentime') {
+        response.statusCode = 200;
+        response.end('<h1>' + new Date().toISOString() + '</h1>');
+    } else if (request.url === '/') {
+        response.statusCode = 200;
+        response.end('<h1>Hello World!</h1>');
+    }
+
+    // localhost:3000/currenttime
+    // localhost:3000
+
 }
 
 const server = http.createServer(handleRequest);
