@@ -1,8 +1,14 @@
 const http = require('http');
 
-const server = http.createServer();
+function handleRequest(request, response) {
+    response.statusCode = 200;
+    response.end('<h1>Hello World!</h1>');
+}
+
+const server = http.createServer(handleRequest);
 
 server.listen(3000);
 
 // amazon.com => Send request to Amazon's server
 // amazon.com:443 
+
