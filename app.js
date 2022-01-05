@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const express = require('express');
+const { response } = require('express');
 
 const app = express(); // parse the incoming data into object 
 
@@ -41,10 +42,18 @@ app.post('/store-user', function (req, res) {
 app.get('/users', function (req, res) {
 
     const filePath = path.join(__dirname, 'data', 'users.json');
-    const newData = fs.readFileSync(filePath);
-    const updatedUsers = JSON.parse(newData);
+    const fileData = fs.readFileSync(filePath);
+    const existingUsers = JSON.parse(fileData);
 
-    res.send('Current users are ' + updatedUsers + '</h2>');
+    let responseData = '<ul>';
+
+    for (const user of existingUsers) {
+        responseData += '<li>' + user + '</li>';
+    }
+
+    responseData += '</ul>';
+
+    res.send(responseData);
 
 
 });
