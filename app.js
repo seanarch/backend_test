@@ -1,6 +1,9 @@
+const fs = require('fs');
+const path = require('path');
+
 const express = require('express');
 
-const app = express();
+const app = express(); // parse the incoming data into object 
 
 app.use(express.urlencoded({ extended: false }));
 
@@ -16,9 +19,37 @@ app.get('/', function (req, res) {
 
 app.post('/store-user', function (req, res) {
     const userName = req.body.username;
+
     console.log(userName);
-    res.send('<h1>Username stored!</h1>');
+    const filePath = path.join(__dirname, 'data', 'users.json');
+    const fileData = fs.readFileSync(filePath);
+    const existingUsers = JSON.parse(fileData);
+
+    existingUsers.push(userName);
+
+
+    fs.writeFileSync(filePath, JSON.stringify(existingUsers));
+
+    const newData = fs.readFileSync(filePath);
+    const updatedUsers = JSON.parse(newData);
+
+    res.send('<h1>Username stored!</h1><br><h2>' + 'Current users are ' + updatedUsers + '</h2>');
+
+
 });
+
+app.get('/users', function (req, res) {
+
+    const filePath = path.join(__dirname, 'data', 'users.json');
+    const newData = fs.readFileSync(filePath);
+    const updatedUsers = JSON.parse(newData);
+
+    res.send('Current users are ' + updatedUsers + '</h2>');
+
+
+});
+
+
 
 app.listen(3000);
 
